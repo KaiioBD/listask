@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Listask"
         tools:targetApi="31">
+
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".view.OnboardingActivity"
             android:exported="true"
             android:theme="@style/Theme.Listask" >
 
@@ -24,8 +25,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
+            android:name=".view.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Listask">
 
         </activity>
     </application>

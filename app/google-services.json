@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891782042016",
+    "project_id": "listask-d6521",
+    "storage_bucket": "listask-d6521.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891782042016:android:e18444ab26b8d22f2294c5",
+        "android_client_info": {
+          "package_name": "com.example.listask"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIRWgwHxdD62CKbXpo5yFrLcqCNdw2wGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
