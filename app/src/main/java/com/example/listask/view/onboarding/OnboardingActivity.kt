@@ -1,4 +1,4 @@
-package com.example.listask.view
+package com.example.listask.view.onboarding
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,6 @@ import com.example.listask.utils.FragmentCommunicator
 
 class OnboardingActivity : AppCompatActivity(), FragmentCommunicator     {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityOnboardingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.example.listask.view
+package com.example.listask.view.onboarding
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.example.listask.R
 import androidx.core.widget.addTextChangedListener
 import com.example.listask.databinding.FragmentLoginBinding
 import com.example.listask.utils.FragmentCommunicator
-import com.example.listask.view.MainActivity
+import com.example.listask.view.list.ListActivity
 import com.example.listask.viewModel.LoginViewModel
 
 /**
@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
         }
         viewModel.sessionValid.observe(viewLifecycleOwner) {validSession ->
             if (validSession) {
-                val intent = Intent(activity, MainActivity::class.java)
+                val intent = Intent(activity, ListActivity::class.java)
                 startActivity(intent)
                 activity?.finish()
             } else  {
