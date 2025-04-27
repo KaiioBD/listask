@@ -30,6 +30,14 @@ class PendingFragment : Fragment() {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.AddTaskButton.setOnClickListener {
+            findNavController().navigate(R.id.action_PendingFragment_to_AddTaskFragment)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
