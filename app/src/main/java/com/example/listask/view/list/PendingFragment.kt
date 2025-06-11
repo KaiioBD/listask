@@ -36,6 +36,7 @@ class PendingFragment : Fragment() {
         binding.AddTaskButton.setOnClickListener {
             findNavController().navigate(R.id.action_PendingFragment_to_AddTaskFragment)
         }
+
     }
 
 
