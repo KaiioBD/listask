@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.0"
+agp = "8.9.1"
 kotlin = "2.1.10"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -14,6 +14,10 @@ navigationUiKtx = "2.8.9"
 lottie = "4.2.2"
 google-services = "4.4.2"
 firebase = "33.11.0"
+coroutines = "1.6.4"
+safeargs = "2.9.0"
+hilt = "2.56.2"
+hilt-plugin = "2.48"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,10 +34,16 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase"}
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+coroutines-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
+hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt"}
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-services-plugin = { id = "com.google.gms.google-services", version.ref = "google-services" }
+safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "safeargs" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
+kapt = { id = "kotlin-kapt" }
 
 

@@ -16,9 +16,7 @@ import com.example.listask.utils.FragmentCommunicator
 import com.example.listask.view.list.ListActivity
 import com.example.listask.viewModel.LoginViewModel
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
