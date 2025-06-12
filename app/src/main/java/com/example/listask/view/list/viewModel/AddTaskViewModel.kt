@@ -7,15 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.listask.core.ResultWrapper
 import com.example.listask.model.Tarea
 import com.example.listask.network.TareaRepository
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.sql.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(
 
-    private val repository: TareaRepository
-
+    private val repository: TareaRepository,
+    private val firebaseAuth: FirebaseAuth
 ): ViewModel() {
 
     private val _tarea = MutableLiveData<List<Tarea>>()
@@ -26,6 +28,10 @@ class AddTaskViewModel @Inject constructor(
 
     private val _loaderState = MutableLiveData<Boolean>()
     val loaderState: LiveData<Boolean> get() = _loaderState
+
+    private val _operationSuccess = MutableLiveData<Boolean>()
+    val operationSuccess: LiveData<Boolean>
+    get() = _operationSuccess
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
@@ -52,14 +58,19 @@ class AddTaskViewModel @Inject constructor(
         }
     }
 
-    fun addTarea(tarea: Tarea) {
+    fun createTaskInfo(tarea: Tarea) {
+        _loaderState.value = true
         viewModelScope.launch {
-            _loaderState.value = true
-            when (val result = repository.addTarea(tarea)) {
-                is ResultWrapper.Success -> Unit // tarea agregada exitosamente
-                is ResultWrapper.Error -> _error.value = result.exception.message
+            when (val result = repository.addTarea(tarea.copy(userId = firebaseAuth.currentUser?.uid ?: ""))) {
+                is ResultWrapper.Success -> {
+                    _loaderState.value = false
+                    //_operationSuccess.value = true
+                }
+                is ResultWrapper.Error -> {
+                    _loaderState.value = false
+                    _error.value = result.exception.message
+                }
             }
-            _loaderState.value = false
         }
     }
 
@@ -84,4 +95,6 @@ class AddTaskViewModel @Inject constructor(
             _loaderState.value = false
         }
     }
+
+
 }

@@ -1,10 +1,11 @@
 package com.example.listask.model
 
-import java.sql.Date
+import java.util.Date
 
 data class Tarea (
-    var id: String = "",
-    var name: String = "",
-    var description: String = "",
-    var date: String = ""
+    val id: String  = "",
+    val name: String  = "",
+    val description: String  = "",
+    val date: Date = Date(),
+    val userId: String  = ""
 )

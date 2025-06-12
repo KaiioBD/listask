@@ -9,24 +9,29 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class TareaRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
 ) {
     private val tareaCollection = firestore.collection("Tasks")
 
     suspend fun addTarea(tarea: Tarea): ResultWrapper<Void> = safeCall {
         val id = tareaCollection.document().id
-        tarea.id = id
         tareaCollection.document(id).set(tarea).await()
     }
 
     suspend fun getTarea(id: String): ResultWrapper<Tarea> = safeCall {
-        val document = tareaCollection.document(id).get().await()
-        document.toObject(Tarea::class.java) ?: throw Exception("Tarea no encontrada")
+        val snapShot = tareaCollection.document(id).get().await()
+        snapShot.toObject(Tarea::class.java) ?: throw Exception("Tarea no encontrada")
     }
 
     suspend fun getAllTareas(): ResultWrapper<List<Tarea>> = safeCall {
-        val snapshot = tareaCollection.get().await()
-        snapshot.toObjects(Tarea::class.java)
+        val userId = firebaseAuth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
+
+        val querySnapshot = tareaCollection.whereEqualTo("userId", userId).get().await()
+
+        querySnapshot.documents.mapNotNull { document ->
+            document.toObject(Tarea::class.java)
+        }
     }
 
     suspend fun updateTarea(tarea: Tarea): ResultWrapper<Void> = safeCall {
