@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.listask.databinding.ActivityOnboardingBinding
 import com.example.listask.utils.FragmentCommunicator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity(), FragmentCommunicator     {
 
     private lateinit var binding: ActivityOnboardingBinding

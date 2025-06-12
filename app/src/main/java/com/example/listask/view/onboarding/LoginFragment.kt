@@ -15,8 +15,9 @@ import com.example.listask.databinding.FragmentLoginBinding
 import com.example.listask.utils.FragmentCommunicator
 import com.example.listask.view.list.ListActivity
 import com.example.listask.viewModel.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null

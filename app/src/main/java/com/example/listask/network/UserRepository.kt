@@ -5,9 +5,11 @@ import com.example.listask.core.safeCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class UserRepository {
-    private val firebaseAuth = FirebaseAuth.getInstance()
+class UserRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+){
 
     suspend fun register(email: String, password: String): ResultWrapper<FirebaseUser> = safeCall {
         val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()

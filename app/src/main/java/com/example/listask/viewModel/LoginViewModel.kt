@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.listask.core.ResultWrapper
 import com.example.listask.network.UserRepository
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
-
-    private val repository = UserRepository()
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: UserRepository
+): ViewModel() {
 
     private val _loaderState = MutableLiveData<Boolean>()
     val loaderState: LiveData<Boolean>
