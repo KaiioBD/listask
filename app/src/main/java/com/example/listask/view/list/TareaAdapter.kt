@@ -2,6 +2,7 @@ package com.example.listask.view.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.listask.databinding.ItemTareaBinding
 import com.example.listask.model.Tarea
@@ -41,6 +42,10 @@ class TareaAdapter(
             deleteButton.setOnClickListener {
                 onDeleteClick(tarea)
             }
+        }
+        holder.binding.editButton.setOnClickListener {
+            val action = PendingFragmentDirections.actionPendingFragmentToAddTaskFragment(tarea)
+            it.findNavController().navigate(action)
         }
     }
 

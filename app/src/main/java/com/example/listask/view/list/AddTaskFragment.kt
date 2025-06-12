@@ -14,6 +14,7 @@ import com.example.listask.model.Tarea
 import com.example.listask.utils.FragmentCommunicator
 import com.example.listask.view.list.viewModel.AddTaskViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,13 +26,27 @@ class AddTaskFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var communicator: FragmentCommunicator
     private val viewModel by viewModels<AddTaskViewModel>()
+    private var tareaEditando: Tarea? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddTaskBinding.inflate(inflater, container, false)
-        communicator = requireActivity() as ListActivity
+        communicator = requireActivity() as FragmentCommunicator
+
+        // Obtenemos la tarea que se está editando si la hay
+        tareaEditando = arguments?.getParcelable("tarea")
+
+        // Si hay tarea, cargamos sus datos en los campos
+        tareaEditando?.let { tarea ->
+            binding.nombreTextField.editText?.setText(tarea.name)
+            binding.descriptionTextField.editText?.setText(tarea.description)
+            val fechaFormateada = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(tarea.date)
+            binding.FechaTextField.editText?.setText(fechaFormateada)
+            binding.agregarButton.text = "Actualizar"
+        }
+
         setupView()
         return binding.root
     }
@@ -55,16 +70,21 @@ class AddTaskFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val nuevaTarea = Tarea(
-                id = UUID.randomUUID().toString(),
+            // Creamos la tarea, si estamos editando usamos el mismo ID y userId, si es nueva generamos nuevo ID y userId
+            val tareaFinal = Tarea(
+                id = tareaEditando?.id ?: UUID.randomUUID().toString(),
                 name = nombre,
                 description = descripcion,
-                date = java.sql.Date(parsedDate.time)
-                // userId se agregará automáticamente en el ViewModel
+                date = java.sql.Date(parsedDate.time),
+                userId = tareaEditando?.userId ?: FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
             )
 
-            viewModel.createTaskInfo(nuevaTarea)
-
+            // Si editamos, actualizamos; si no, creamos nueva
+            if (tareaEditando != null) {
+                viewModel.updateTaskInfo(tareaFinal)
+            } else {
+                viewModel.createTaskInfo(tareaFinal)
+            }
         }
 
         binding.backButton.setOnClickListener {
@@ -81,7 +101,8 @@ class AddTaskFragment : Fragment() {
 
         viewModel.operationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                Snackbar.make(binding.root, "Tarea agregada con éxito", Snackbar.LENGTH_SHORT).show()
+                val mensaje = if (tareaEditando != null) "Tarea actualizada con éxito" else "Tarea agregada con éxito"
+                Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(R.id.action_AddTaskFragment_to_PendingFragment)
             }
         }

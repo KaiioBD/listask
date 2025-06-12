@@ -8,6 +8,7 @@ import com.example.listask.core.ResultWrapper
 import com.example.listask.model.Tarea
 import com.example.listask.network.TareaRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.sql.Date
@@ -25,6 +26,9 @@ class AddTaskViewModel @Inject constructor(
 
     private val _selectedTarea = MutableLiveData<Tarea>()
     val selectedTarea: LiveData<Tarea> get() = _selectedTarea
+
+    private val _taskAdded = MutableLiveData<Boolean>()
+    val taskAdded: LiveData<Boolean> = _taskAdded
 
     private val _loaderState = MutableLiveData<Boolean>()
     val loaderState: LiveData<Boolean> get() = _loaderState
@@ -58,17 +62,30 @@ class AddTaskViewModel @Inject constructor(
         }
     }
 
+    fun updateTaskInfo(tarea: Tarea) {
+        viewModelScope.launch {
+            _loaderState.value = true
+            when (val result = repository.updateTarea(tarea)) {
+                is ResultWrapper.Success -> {
+                    _operationSuccess.value = true
+                }
+                is ResultWrapper.Error -> _error.value = result.exception.message
+            }
+            _loaderState.value = false
+        }
+    }
+
     fun createTaskInfo(tarea: Tarea) {
         _loaderState.value = true
         viewModelScope.launch {
             when (val result = repository.addTarea(tarea.copy(userId = firebaseAuth.currentUser?.uid ?: ""))) {
                 is ResultWrapper.Success -> {
+                    _operationSuccess.value = true
                     _loaderState.value = false
-                    //_operationSuccess.value = true
                 }
                 is ResultWrapper.Error -> {
-                    _loaderState.value = false
                     _error.value = result.exception.message
+                    _loaderState.value = false
                 }
             }
         }

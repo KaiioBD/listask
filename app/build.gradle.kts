@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.safeargs)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

@@ -24,5 +24,12 @@
         <action
             android:id="@+id/action_AddTaskFragment_to_PendingFragment"
             app:destination="@id/PendingFragment" />
+
+        <argument
+            android:name="tarea"
+            app:argType="com.example.listask.model.Tarea"
+            app:nullable="true" />
     </fragment>
+
+
 </navigation>

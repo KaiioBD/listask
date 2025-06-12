@@ -39,6 +39,16 @@
         android:orientation="horizontal"/>
 
     <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Editar"
+        android:backgroundTint="#1976D2"
+        android:layout_gravity="end"
+        android:textColor="@android:color/white"
+        android:layout_marginEnd="8dp"/>
+
+    <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

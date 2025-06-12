@@ -16,7 +16,8 @@ class TareaRepository @Inject constructor(
 
     suspend fun addTarea(tarea: Tarea): ResultWrapper<Void> = safeCall {
         val id = tareaCollection.document().id
-        tareaCollection.document(id).set(tarea).await()
+        val tareaConId = tarea.copy(id = id)
+        tareaCollection.document(id).set(tareaConId).await()
     }
 
     suspend fun getTarea(id: String): ResultWrapper<Tarea> = safeCall {
