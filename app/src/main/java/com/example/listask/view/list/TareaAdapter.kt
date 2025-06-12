@@ -8,8 +8,10 @@ import com.example.listask.model.Tarea
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TareaAdapter(private val tareas: List<Tarea>) :
-    RecyclerView.Adapter<TareaAdapter.TareaViewHolder>() {
+class TareaAdapter(
+    private val tareas: List<Tarea>,
+    private val onDeleteClick: (Tarea) -> Unit
+) : RecyclerView.Adapter<TareaAdapter.TareaViewHolder>() {
 
     inner class TareaViewHolder(val binding: ItemTareaBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -25,6 +27,20 @@ class TareaAdapter(private val tareas: List<Tarea>) :
             tareaName.text = tarea.name
             tareaDescription.text = tarea.description
             tareaDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(tarea.date)
+
+            root.setOnLongClickListener {
+                onDeleteClick(tarea)
+                true
+            }
+        }
+        holder.binding.apply {
+            tareaName.text = tarea.name
+            tareaDescription.text = tarea.description
+            tareaDate.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(tarea.date)
+
+            deleteButton.setOnClickListener {
+                onDeleteClick(tarea)
+            }
         }
     }
 

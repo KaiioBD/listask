@@ -44,7 +44,9 @@ class PendingFragment : Fragment() {
             findNavController().navigate(R.id.action_PendingFragment_to_AddTaskFragment)
         }
 
-        adapter = TareaAdapter(tareasList)
+        adapter = TareaAdapter(tareasList) { tarea ->
+            eliminarTarea(tarea)
+        }
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = this@PendingFragment.adapter
@@ -54,9 +56,21 @@ class PendingFragment : Fragment() {
 
     }
 
+    private fun eliminarTarea(tarea: Tarea) {
+        db.collection("Tasks").document(tarea.id)
+            .delete()
+            .addOnSuccessListener {
+                tareasList.remove(tarea)
+                adapter.notifyDataSetChanged()
+                Toast.makeText(requireContext(), "Tarea eliminada", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error al eliminar en Firestore", Toast.LENGTH_SHORT).show()
+            }
+    }
+
     private fun loadUserTasks() {
         val userId = auth.currentUser?.uid ?: return
-        Log.d("USER_ID", "Buscando tareas para UID: $userId")
 
         db.collection("Tasks")
             .whereEqualTo("userId", userId)
@@ -64,15 +78,13 @@ class PendingFragment : Fragment() {
             .addOnSuccessListener { result ->
                 tareasList.clear()
                 for (document in result) {
-                    val tarea = document.toObject(Tarea::class.java)
+                    val tarea = document.toObject(Tarea::class.java).copy(id = document.id)
                     tareasList.add(tarea)
                 }
-                Log.d("TAREAS", "Tareas cargadas: ${tareasList.size}")
                 adapter.notifyDataSetChanged()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(requireContext(), "Error al cargar tareas: ${e.message}", Toast.LENGTH_SHORT).show()
-                Log.e("TAREAS", "Error: ", e)
+                Toast.makeText(requireContext(), "Error al cargar tareas", Toast.LENGTH_SHORT).show()
             }
     }
 
